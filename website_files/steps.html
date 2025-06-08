@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Steps to Host</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+  <header>
+    <h1>Steps to Host Static Website</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="steps.html">Steps</a>
+    </nav>
+  </header>
+
+  <main>
+    <ol>
+      <li><strong>Create an S3 bucket:</strong> Name it after your domain (e.g., <code>yourdomain.com</code>). Enable static website hosting and upload your HTML files.</li>
+      <li><strong>Make files public:</strong> Adjust bucket policy to allow public read access to your website content.</li>
+      <li><strong>Use AWS Certificate Manager (ACM):</strong> Request a free SSL certificate for HTTPS.</li>
+      <li><strong>Create a CloudFront distribution:</strong> Set your S3 website endpoint as the origin. Attach the SSL cert from ACM.</li>
+      <li><strong>Set up Route 53:</strong> Create a hosted zone and add an alias record pointing your domain to CloudFront.</li>
+    </ol>
+  </main>
+
+  <footer>
+    <p>© 2025 Static AWS Guide</p>
+  </footer>
+</body>
+</html>

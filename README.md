@@ -8,7 +8,7 @@ This project demonstrates how to host a static website on AWS with a custom doma
 - **Amazon CloudFront** – CDN for global content delivery
 - **Amazon Route 53** – Domain registration and DNS routing
 - **AWS Certificate Manager (ACM)** – Manages SSL/TLS certificates
-- **AWS CodePipeline + CodeBuild** – Automates CI/CD from GitHub
+- **AWS CodePipeline** – Automates CI/CD from GitHub
 
 ## 🔐 Domain & HTTPS
 

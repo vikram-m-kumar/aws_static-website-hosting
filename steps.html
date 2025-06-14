@@ -17,59 +17,57 @@
 
   <main>
     <ol>
-      <li>
-        <strong>Create an S3 Bucket:</strong><br/>
-        - Go to the AWS Console → S3 → Create bucket<br/>
-        - Name the bucket exactly like your domain (e.g., <code>example.com</code>)<br/>
-        - Uncheck "Block all public access" (you will manage access manually)<br/>
-        - Enable static website hosting under the "Properties" tab
+      <li><strong>Register a Domain (Route 53):</strong><br/>
+        Buy a domain (e.g., <code>example.com</code>) using Route 53 or any registrar.
       </li>
-      <li>
-        <strong>Upload Website Files:</strong><br/>
-        - Upload your HTML, CSS, and image files (e.g., <code>index.html</code>)<br/>
-        - Set <code>index.html</code> as the default root object in static website hosting settings
+      <li><strong>Create S3 Buckets:</strong><br/>
+        - Bucket 1: <code>example.com</code><br/>
+        - Bucket 2: <code>www.example.com</code><br/>
+        (Names must match your domain/subdomain.)
       </li>
-      <li>
-        <strong>Make Files Public:</strong><br/>
-        - Set a bucket policy to allow public read access<br/>
-        - Sample policy:
-        <pre><code>{
-  "Version": "2012-10-17",
-  "Statement": [{
-    "Sid": "PublicReadGetObject",
-    "Effect": "Allow",
-    "Principal": "*",
-    "Action": "s3:GetObject",
-    "Resource": "arn:aws:s3:::example.com/*"
-  }]
-}</code></pre>
+      <li><strong>Enable Static Website Hosting:</strong><br/>
+        - In bucket properties, enable static website hosting<br/>
+        - Set <code>index.html</code> as the root document
       </li>
-      <li>
-        <strong>Request SSL Certificate (HTTPS):</strong><br/>
-        - Go to AWS Certificate Manager (ACM) → Request certificate<br/>
-        - Use your domain (e.g., <code>example.com</code>) and subdomain (<code>www.example.com</code>)<br/>
-        - Validate via DNS (copy DNS records into Route 53)
+      <li><strong>Upload Website Files to S3:</strong><br/>
+        - Upload <code>index.html</code>, <code>style.css</code>, etc.
       </li>
-      <li>
-        <strong>Set Up CloudFront:</strong><br/>
-        - Create a CloudFront distribution<br/>
-        - Use your S3 static website endpoint as the origin<br/>
+      <li><strong>Set Bucket Access:</strong><br/>
+        - Block public access (you’ll allow access via CloudFront)<br/>
+        - CloudFront will use an Origin Access Identity (OAI) for secure access
+      </li>
+      <li><strong>Request SSL Certificate (ACM):</strong><br/>
+        - Use ACM in <strong>us-east-1</strong><br/>
+        - Add DNS validation records via Route 53<br/>
+        - Wait for certificate status to turn “Success”
+      </li>
+      <li><strong>Create a CloudFront Distribution:</strong><br/>
+        - Set S3 website endpoint as origin<br/>
         - Attach the SSL certificate from ACM<br/>
-        - Enable redirect HTTP to HTTPS
+        - Enable "Redirect HTTP to HTTPS"<br/>
+        - Set default root object to <code>index.html</code>
       </li>
-      <li>
-        <strong>Register or Transfer Domain:</strong><br/>
-        - Use Route 53 to register a new domain or transfer an existing one
+      <li><strong>Configure Route 53 DNS:</strong><br/>
+        - Create an A Record (alias) pointing to CloudFront<br/>
+        - Do this for both root domain and <code>www</code> subdomain
       </li>
-      <li>
-        <strong>Create a Hosted Zone:</strong><br/>
-        - In Route 53 → Hosted Zones → Create hosted zone<br/>
-        - Add an <code>A</code> record with **Alias** pointing to the CloudFront distribution
+      <li><strong>Set Up GitHub Repo:</strong><br/>
+        - Add website files directly in root directory<br/>
+        - Avoid subfolders like <code>website_files/</code>
       </li>
-      <li>
-        <strong>Test Your Website:</strong><br/>
-        - Open your domain in a browser (e.g., <code>https://www.example.com</code>)<br/>
-        - You should see your website live and served over HTTPS
+      <li><strong>Enable CI/CD with AWS CodePipeline:</strong><br/>
+        - Source: GitHub repo<br/>
+        - Build: (Skip)<br/>
+        - Deploy: S3 bucket<br/>
+        - Every GitHub push triggers automatic deployment
+      </li>
+      <li><strong>Invalidate CloudFront Cache:</strong><br/>
+        - Manually invalidate after deployment to reflect latest changes<br/>
+        - CloudFront caches aggressively for performance
+      </li>
+      <li><strong>Test Your Website:</strong><br/>
+        - Visit <code>https://www.example.com</code><br/>
+        - Verify HTTPS and updated content
       </li>
     </ol>
   </main>
